@@ -37,7 +37,8 @@ axios
   .get(USER_URL)
   .then((response) => {
     people.push(...response.data.results);
-    renderPeopleList(people);
+    renderPage(people);
+    renderPeopleList(showPeoplePerPage(1));
   })
   .catch((err) => console.log(err));
 
@@ -102,3 +103,23 @@ function addToFav(id) {
   plist.push(favPerson);
   localStorage.setItem("FavoriteList", JSON.stringify(plist));
 }
+
+//Paginator
+const paginator = document.querySelector("#paginator");
+const personPerPage = 24;
+
+function showPeoplePerPage(page) {
+  const startIndex = (page - 1) * personPerPage;
+  return people.slice(startIndex, startIndex + personPerPage);
+}
+
+function renderPage(arr) {
+  const numberOfPages = Math.ceil(arr.length / personPerPage);
+  let rawHTML = ``;
+  for (i = 1; i <= numberOfPages; i++) {
+    rawHTML += `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`;
+  }
+  paginator.innerHTML = rawHTML;
+}
+
+paginator.addEventListener("click", function showPage(event) {});
